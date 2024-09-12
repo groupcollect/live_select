@@ -49,7 +49,7 @@ defmodule LiveSelect.Component do
     tailwind: [
       active_option: ~W(text-white bg-gray-600),
       available_option: ~W(cursor-pointer hover:bg-gray-400 rounded),
-      caret: ~W(absolute right-0 top-1/2 -translate-y-1/2),
+      caret: ~W(psb-w-5 psb-w-5 psb-absolute psb-right-4 psb-top-1/2 -psb-translate-y-1\2),
       clear_button: ~W(hidden cursor-pointer),
       clear_tag_button: ~W(cursor-pointer),
       container: ~W(h-full text-black relative),
@@ -718,13 +718,14 @@ defmodule LiveSelect.Component do
 
   attr :class, :any, default: ["w-5 h-5"]
 
-  defp v(assigns) do
+  defp caret(assigns) do
     ~H"""
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 20"
-      fill="currentColor"
+      viewBox="0 0 32 32"
+      fill="none"
       class={@class}
+      data-caret
     >
       <path d="M8 12L16 20L24 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>

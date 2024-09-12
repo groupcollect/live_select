@@ -42,71 +42,71 @@
       <% end %>
     </div>
   <% end %>
-  <div>
-    <%= text_input(@field.form, @text_input_field,
-      class:
-        class(@style, :text_input, @text_input_class, @text_input_extra_class) ++
-          List.wrap(
-            if(Enum.any?(@selection),
-              do: class(@style, :text_input_selected, @text_input_selected_class)
-            )
-          ),
-      placeholder: @placeholder,
-      phx_target: @myself,
-      phx_change: "change",
-      disabled: @disabled,
-      readonly: @mode == :single && Enum.any?(@selection),
-      autocomplete: "off",
-      phx_focus: "focus",
-      phx_click: "click",
-      phx_blur: "blur",
-      value: label(@mode, @selection)
-    ) %>
-    <%= if @mode == :single && @allow_clear && Enum.any?(@selection) do %>
-      <button
-        type="button"
-        phx-click="clear"
-        phx-target={@myself}
-        class={class(@style, :clear_button, @clear_button_class, @clear_button_extra_class)}
-      >
-        <%= if @clear_button == [] do %>
-          <.x />
-        <% else %>
-          <%= render_slot(@clear_button) %>
-        <% end %>
-      </button>
-    <% end %>
-  </div>
-  <div style="position: relative;">
-    <%= if @mode == :single do %>
-      <%= hidden_input(@field.form, @field.field,
+  <div style="position: relative; margin-bottom: 0.8rem;">
+    <div style="position: relative;">
+      <%= text_input(@field.form, @text_input_field,
+        class:
+          class(@style, :text_input, @text_input_class, @text_input_extra_class) ++
+            List.wrap(
+              if(Enum.any?(@selection),
+                do: class(@style, :text_input_selected, @text_input_selected_class)
+              )
+            ),
+        placeholder: @placeholder,
+        phx_target: @myself,
+        phx_change: "change",
         disabled: @disabled,
-        class: "single-mode",
-        value: value(@selection)
+        readonly: @mode == :single && Enum.any?(@selection),
+        autocomplete: "off",
+        phx_focus: "focus",
+        phx_click: "click",
+        phx_blur: "blur",
+        value: label(@mode, @selection)
       ) %>
-    <% else %>
-      <!-- TODO: the stuff below could be replaced with a single hidden, readonly multiselect, but updates don't quite work. So we resort to hidden inputs for now -->
-      <%= if Enum.empty?(@selection) do %>
-        <input
-          type="hidden"
-          name={"#{@field.form.name}[#{@field.field}_empty_selection]"}
-          id={"#{@field.id}_empty_selection"}
-          disabled={@disabled}
-          data-live-select-empty
-        />
+      <%= if @mode == :single && @allow_clear && Enum.any?(@selection) do %>
+        <button
+          type="button"
+          phx-click="clear"
+          phx-target={@myself}
+          class={class(@style, :clear_button, @clear_button_class, @clear_button_extra_class)}
+        >
+          <%= if @clear_button == [] do %>
+            <.x />
+          <% else %>
+            <%= render_slot(@clear_button) %>
+          <% end %>
+        </button>
       <% end %>
-      <%= for {value, idx} <- values(@selection) |> Enum.with_index() do %>
-        <input
-          type="hidden"
-          name={@field.name <> "[]"}
-          id={@field.id <> "_#{idx}"}
-          disabled={@disabled}
-          value={value}
-        />
-      <% end %>
-    <% end %>
-    <.v class={class(@style, :caret, @caret_class)}/>
+    </div>
+    <.caret class={class(@style, :caret, @caret_class)} />
   </div>
+  <%= if @mode == :single do %>
+    <%= hidden_input(@field.form, @field.field,
+      disabled: @disabled,
+      class: "single-mode",
+      value: value(@selection)
+    ) %>
+  <% else %>
+    <!-- TODO: the stuff below could be replaced with a single hidden, readonly multiselect, but updates don't quite work. So we resort to hidden inputs for now -->
+    <%= if Enum.empty?(@selection) do %>
+      <input
+        type="hidden"
+        name={"#{@field.form.name}[#{@field.field}_empty_selection]"}
+        id={"#{@field.id}_empty_selection"}
+        disabled={@disabled}
+        data-live-select-empty
+      />
+    <% end %>
+    <%= for {value, idx} <- values(@selection) |> Enum.with_index() do %>
+      <input
+        type="hidden"
+        name={@field.name <> "[]"}
+        id={@field.id <> "_#{idx}"}
+        disabled={@disabled}
+        value={value}
+      />
+    <% end %>
+  <% end %>
   <%= if Enum.any?(@options) && !@hide_dropdown do %>
     <ul class={class(@style, :dropdown, @dropdown_class, @dropdown_extra_class)}>
       <%= for {option, idx} <- Enum.with_index(@options) do %>
