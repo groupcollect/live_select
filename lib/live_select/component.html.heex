@@ -77,33 +77,36 @@
       </button>
     <% end %>
   </div>
-  <%= if @mode == :single do %>
-    <%= hidden_input(@field.form, @field.field,
-      disabled: @disabled,
-      class: "single-mode",
-      value: value(@selection)
-    ) %>
-  <% else %>
-    <!-- TODO: the stuff below could be replaced with a single hidden, readonly multiselect, but updates don't quite work. So we resort to hidden inputs for now -->
-    <%= if Enum.empty?(@selection) do %>
-      <input
-        type="hidden"
-        name={"#{@field.form.name}[#{@field.field}_empty_selection]"}
-        id={"#{@field.id}_empty_selection"}
-        disabled={@disabled}
-        data-live-select-empty
-      />
+  <div style="position: relative;">
+    <%= if @mode == :single do %>
+      <%= hidden_input(@field.form, @field.field,
+        disabled: @disabled,
+        class: "single-mode",
+        value: value(@selection)
+      ) %>
+    <% else %>
+      <!-- TODO: the stuff below could be replaced with a single hidden, readonly multiselect, but updates don't quite work. So we resort to hidden inputs for now -->
+      <%= if Enum.empty?(@selection) do %>
+        <input
+          type="hidden"
+          name={"#{@field.form.name}[#{@field.field}_empty_selection]"}
+          id={"#{@field.id}_empty_selection"}
+          disabled={@disabled}
+          data-live-select-empty
+        />
+      <% end %>
+      <%= for {value, idx} <- values(@selection) |> Enum.with_index() do %>
+        <input
+          type="hidden"
+          name={@field.name <> "[]"}
+          id={@field.id <> "_#{idx}"}
+          disabled={@disabled}
+          value={value}
+        />
+      <% end %>
     <% end %>
-    <%= for {value, idx} <- values(@selection) |> Enum.with_index() do %>
-      <input
-        type="hidden"
-        name={@field.name <> "[]"}
-        id={@field.id <> "_#{idx}"}
-        disabled={@disabled}
-        value={value}
-      />
-    <% end %>
-  <% end %>
+    <.v class={class(@style, :caret, @caret_class)}/>
+  </div>
   <%= if Enum.any?(@options) && !@hide_dropdown do %>
     <ul class={class(@style, :dropdown, @dropdown_class, @dropdown_extra_class)}>
       <%= for {option, idx} <- Enum.with_index(@options) do %>
