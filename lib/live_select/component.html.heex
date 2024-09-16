@@ -76,6 +76,7 @@
         <% end %>
       </button>
     <% end %>
+    <.caret class={class(@style, :caret, @caret_class)} />
   </div>
   <%= if @mode == :single do %>
     <%= hidden_input(@field.form, @field.field,

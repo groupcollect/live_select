@@ -13,6 +13,9 @@ export default {
         textInput() {
             return this.el.querySelector("input[type=text]")
         },
+        caret() {
+            return this.el.querySelector("[data-live-select-caret]")
+        },
         debounceMsec() {
             return parseInt(this.el.dataset["debounce"])
         },
@@ -113,6 +116,7 @@ export default {
                     }
                 }
             })
+            this.caret().addEventListener("click", () => this.textInput().focus())
             this.attachDomEventHandlers()
         },
         updated() {

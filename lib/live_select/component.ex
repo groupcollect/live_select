@@ -14,6 +14,7 @@ defmodule LiveSelect.Component do
     active_option_class: nil,
     allow_clear: false,
     available_option_class: nil,
+    caret_class: nil,
     clear_button_class: nil,
     clear_button_extra_class: nil,
     clear_tag_button_class: nil,
@@ -48,6 +49,7 @@ defmodule LiveSelect.Component do
     tailwind: [
       active_option: ~W(text-white bg-gray-600),
       available_option: ~W(cursor-pointer hover:bg-gray-400 rounded),
+      caret: ~W(hidden cursor-pointer),
       clear_button: ~W(hidden cursor-pointer),
       clear_tag_button: ~W(cursor-pointer),
       container: ~W(h-full text-black relative),
@@ -63,6 +65,7 @@ defmodule LiveSelect.Component do
     daisyui: [
       active_option: ~W(active),
       available_option: ~W(cursor-pointer),
+      caret: ~W(hidden cursor-pointer),
       clear_button: ~W(hidden cursor-pointer),
       clear_tag_button: ~W(cursor-pointer),
       container: ~W(dropdown dropdown-open),
@@ -363,6 +366,7 @@ defmodule LiveSelect.Component do
           :"phx-focus",
           :option,
           :tag,
+          :caret,
           :clear_button,
           :hide_dropdown,
           :value_mapper,
@@ -710,6 +714,22 @@ defmodule LiveSelect.Component do
       class={["w-5 h-5"]}
     >
       <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+    </svg>
+    """
+  end
+
+  attr :class, :any, default: []
+
+  defp caret(assigns) do
+    ~H"""
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      fill="none"
+      class={@class}
+      data-live-select-caret
+    >
+      <path d="M8 12L16 20L24 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     """
   end
